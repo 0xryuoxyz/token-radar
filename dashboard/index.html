@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="dot"></span><div><h1>TOKEN RADAR</h1><p>Every pre-token protocol, ranked by what its token could be worth.</p></div></div>
+  <div class="meta" id="meta"></div>
+</header>
+<section class="kpis" id="kpis" aria-label="Snapshot summary"></section>
+<section class="strip" id="strip" aria-label="Accounting and integrity"></section>
+<nav class="tabs" aria-label="Views">
+  <button data-tab="board" class="on" type="button">Board</button>
+  <button data-tab="live" type="button">Live tokens</button>
+  <button data-tab="model" type="button">Model &amp; proof</button>
+</nav>
+<section id="view-board" class="view">
+  <div class="controls">
+    <input id="q" type="search" placeholder="Search name or slug…" aria-label="Search protocols">
+    <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+    <select id="sort" aria-label="Sort board">
+      <option value="rank">Sort: rank</option>
+      <option value="implied">Sort: implied value</option>
+      <option value="tvl">Sort: TVL</option>
+      <option value="growth">Sort: 7-day growth</option>
+      <option value="readiness">Sort: readiness</option>
+    </select>
+    <label class="chk"><input id="watch" type="checkbox"> Watchlist only</label>
+    <label class="chk"><input id="farm" type="checkbox"> FARM verdict only</label>
+  </div>
+  <p class="hint" id="count"></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th>Protocol</th><th>Category</th><th>TVL</th><th>7d</th><th>Implied value</th><th>Token odds</th><th>Ready</th><th>Verdict</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+</section>
+<section id="view-live" class="view" hidden>
+  <p class="lede">These protocols already trade. The board never ranks them — here they are at the market's own value, so the radar's implied values can be checked against real ones.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Protocol</th><th>Category</th><th>TVL</th><th>Market cap</th><th>mcap / TVL</th><th>7d</th></tr></thead>
+    <tbody id="liveRows"></tbody>
+  </table></div>
+</section>
+<section id="view-model" class="view" hidden>
+  <h2>How every number is made</h2>
+  <p class="lede">Implied value = 10^(intercept + slope × log10(TVL) + category offset) × growth × maturity × breadth. The comps curve is fitted at run time from the live protocols in this snapshot — an OLS line of log10(market cap) on log10(TVL), slope shrunk by half, plus a per-category offset. No protocol name is ever special-cased.</p>
+  <div id="calib"></div>
+  <h3>Integrity strip — six proofs that can fail</h3>
+  <p class="lede">Every proof below is recomputed from the data on this page. A proof that fails shows FAIL in red — nothing here is a claim you have to take on trust.</p>
+  <div id="proofs"></div>
+  <h3>Token odds — what they are and are not</h3>
+  <p class="lede">Token odds are the observed share of protocols in the same age band that already record a token (a market cap, a Gecko id or a symbol), smoothed toward the global base rate. They are a base rate from the peers' record, not a prediction: a token may never be issued, and the odds never say it will. Age unknown uses the global base rate and says so.</p>
+  <h3>Model sandbox</h3>
+  <p class="lede">Move a slider and the selected protocol's implied value is recomputed with the same formula. The board itself is fixed by the snapshot; the sandbox only shows how sensitive it is.</p>
+  <div class="sandbox" id="sandbox"></div>
+  <h3>What the radar does not claim</h3>
+  <p class="lede">Implied value is a model estimate, never a price and never a prediction of whether or when a token is issued. A token may never be issued. A protocol is shown as recording no token, never as having none — its DefiLlama record may simply not carry one. Wrapped, staked and bridged products of tokens that already trade are excluded, as are exchanges and versioned pools.</p>
+</section>
+<aside id="drawer" class="drawer" hidden aria-label="Protocol detail"></aside>
+<footer><p>Snapshot <span id="foot"></span> · Model radar-6 · Data: DefiLlama public API, sealed snapshot. Implied values are estimates, not prices.</p></footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
